@@ -4,8 +4,20 @@ services:
 
 
 before_install:
-    - docker build -t akshay/docker-react -f Dockerfile.dev .
+    - docker build -t blackflagbaby/docker-react -f Dockerfile.dev .
 
 
 script:
-    - docker run akshay/docker-react npm run test -- --coverage
+    - docker run -e CI=true blackflagbaby/docker-react npm run test
+
+deploy:
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "docker"
+    env: "Docker-env"
+    bucket_name: "elasticbeanstalk-us-east-2-635723511133"
+    bucket_path: "docker"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_aceess_key: $AWS_SECRET_KEY"
